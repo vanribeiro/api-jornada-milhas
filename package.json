@@ -1,0 +1,28 @@
+{
+  "name": "api-jornada-milhas",
+  "version": "1.0.0",
+  "description": "API RESTful para conectar ao site jornada milhas",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanribeiro/api-jornada-milhas.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "TypeScript",
+    "NodeJS",
+    "API",
+    "RESTful",
+    "Alura",
+    "Challenge"
+  ],
+  "author": "Van Ribeiro (@vanribeiro.dev)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vanribeiro/api-jornada-milhas/issues"
+  },
+  "homepage": "https://github.com/vanribeiro/api-jornada-milhas#readme"
+}
