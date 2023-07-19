@@ -8,7 +8,7 @@ Criar uma API RESTful que será integrada com o Front-End da aplicação.
 
 É um site que permite buscar possíveis destinos de viagem. Além disso, outros recursos como depoimentos de outros viajantes e integração de IA serão integrados ao aplicação.
 
-## Linguagem Escolhida e Tecnologias escolhidas
+## Linguagem e tecnologias escolhidas
 
 ### Linguagem: 
 
