@@ -21,7 +21,14 @@ Obs: _vou alimentando essa seção a medida que vou realizando o desafio_
 - [NodeJS](https://nodejs.org/en)
 - [NPM](https://docs.npmjs.com/)
 - [ExpressJS](https://expressjs.com/pt-br/)
-- [Sequilize](https://sequelize.org/)
+- [TypeORM](https://typeorm.io/)
+- [MySQL](https://www.mysql.com/)
 - [Git](https://git-scm.com/)
 - [GitHub](https://github.com/)
 - [Jest](https://jestjs.io/)
+
+## Diagrama de Relacionamento
+
+A medida que o desafio vai sendo liberado, estou desenhando o diagrama de realacionamento: 
+
+![Diagrama de Relacionamento](/assets/[Challenge]%20App%20Jornada%20Milha.png)
