@@ -1,7 +1,7 @@
-interface IPerson {
+interface IUser {
     id: string;
     name: string;
     image: string;
 }
 
-export default IPerson;
+export default IUser;

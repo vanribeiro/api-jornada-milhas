@@ -1,7 +1,6 @@
 import { DataSource } from "typeorm";
 import User from "../models/User.js";
 import Testimonial from "../models/Testimonial.js";
-
 const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
@@ -13,5 +12,4 @@ const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
 });
-
 export default AppDataSource;

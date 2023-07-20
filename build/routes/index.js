@@ -1,9 +1,7 @@
 import express from 'express';
 import testemonials from './testimonialsRoutes.js';
+import users from './userRoutes.js';
 const routes = (app) => {
-    app.route('/').get((_req, res) => {
-        res.status(200).send({ titulo: 'Curso de Node' });
-    });
-    app.use(express.json(), testemonials);
+    app.use(express.json(), testemonials, users);
 };
 export default routes;

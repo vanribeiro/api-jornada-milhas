@@ -7,8 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-let Person = class Person {
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import Testimonial from "./Testimonial.js";
+let User = class User {
     constructor(name, image) {
         this.name = name;
         this.image = image;
@@ -17,17 +18,21 @@ let Person = class Person {
 __decorate([
     PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], Person.prototype, "id", void 0);
+], User.prototype, "id", void 0);
 __decorate([
     Column("text"),
     __metadata("design:type", String)
-], Person.prototype, "name", void 0);
+], User.prototype, "name", void 0);
 __decorate([
     Column("text"),
     __metadata("design:type", String)
-], Person.prototype, "image", void 0);
-Person = __decorate([
+], User.prototype, "image", void 0);
+__decorate([
+    OneToMany(() => Testimonial, (testimonial) => testimonial.user),
+    __metadata("design:type", Array)
+], User.prototype, "testemonials", void 0);
+User = __decorate([
     Entity(),
     __metadata("design:paramtypes", [String, String])
-], Person);
-export default Person;
+], User);
+export default User;

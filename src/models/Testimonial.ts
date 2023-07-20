@@ -1,7 +1,16 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm";
+import User from "./User.js";
+
+@Entity()
 class Testimonial {
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column('mediumtext')
     text: string;
-    person_id: string;
+
+    @ManyToOne(() => User, (user) => user.testemonials)
+    user: Relation<User>;
 }
 
 export default Testimonial;
