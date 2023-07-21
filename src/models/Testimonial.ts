@@ -3,6 +3,11 @@ import User from "./User.js";
 
 @Entity()
 class Testimonial {
+    constructor (text: string, user: User) {
+        this.text = text;
+        this.user = user;
+    }
+
     @PrimaryGeneratedColumn()
     id: number;
 

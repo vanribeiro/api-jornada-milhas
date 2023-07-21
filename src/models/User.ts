@@ -17,7 +17,7 @@ class User {
     @Column("text")
     image: string;
 
-    @OneToMany(() => Testimonial, (testimonial) => testimonial.user)
+    @OneToMany(() => Testimonial, (testimonial) => testimonial.user, { cascade: true })
     testemonials: Testimonial[];
 }
 

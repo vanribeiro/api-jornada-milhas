@@ -28,7 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "image", void 0);
 __decorate([
-    OneToMany(() => Testimonial, (testimonial) => testimonial.user),
+    OneToMany(() => Testimonial, (testimonial) => testimonial.user, { cascade: true }),
     __metadata("design:type", Array)
 ], User.prototype, "testemonials", void 0);
 User = __decorate([

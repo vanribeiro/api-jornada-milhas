@@ -1,10 +1,9 @@
 import User from "../models/User.js";
-import AppDataSource from "../config/data-source.js";
+import { AppDataSource } from "../config/data-source.js";
 const user = (name, image) => new User(name, image);
 const userRepository = AppDataSource.getRepository(User);
-const save = async (user) => await userRepository.save(user);
-const findAll = async () => await userRepository.find();
-const findOne = async (id) => await userRepository.findOneBy({ id });
-const findBy = async (value) => await userRepository.findBy(value);
-const remove = async (item) => await userRepository.remove(item);
-export { user, save, findAll, findOne, findBy, remove };
+const findOneUser = async (id, isARelation) => await userRepository.findOne({
+    where: { id },
+    relations: { testemonials: isARelation },
+});
+export { user, userRepository, findOneUser };

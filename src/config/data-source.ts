@@ -14,4 +14,6 @@ const AppDataSource = new DataSource({
     logging: false,
 });
 
-export default AppDataSource;
+const manager = AppDataSource.manager;
+
+export { AppDataSource, manager };

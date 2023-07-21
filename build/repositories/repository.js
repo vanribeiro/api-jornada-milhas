@@ -1,0 +1,10 @@
+import AppDataSource from "../config/data-source.js";
+import { Entity } from "../generics/index.js";
+const entity = (value) => new Entity(value);
+const repository = AppDataSource.getRepository(entity);
+const save = async (entity) => await repository.save(entity);
+const find = async (value) => await repository.findBy(value);
+const findAll = async () => await repository.find();
+const findById = async (id) => await repository.findOneBy({ id });
+const remove = async (item) => await repository.remove(item);
+export { entity, save, find, findAll, findById, remove };

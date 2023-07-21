@@ -10,6 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import User from "./User.js";
 let Testimonial = class Testimonial {
+    constructor(text, user) {
+        this.text = text;
+        this.user = user;
+    }
 };
 __decorate([
     PrimaryGeneratedColumn(),
@@ -24,6 +28,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Testimonial.prototype, "user", void 0);
 Testimonial = __decorate([
-    Entity()
+    Entity(),
+    __metadata("design:paramtypes", [String, User])
 ], Testimonial);
 export default Testimonial;
