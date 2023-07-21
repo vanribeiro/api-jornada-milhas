@@ -31,4 +31,4 @@ Obs: _vou alimentando essa seção a medida que vou realizando o desafio_
 
 A medida que o desafio vai sendo liberado, estou desenhando o diagrama de realacionamento: 
 
-![Diagrama de Relacionamento](/assets/[Challenge]%20App%20Jornada%20Milha.png)
+![Diagrama de Relacionamento](/extras/[Challenge]%20App%20Jornada%20Milhas.jpeg)
