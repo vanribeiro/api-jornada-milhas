@@ -1,7 +1,7 @@
 import express from "express";
+import cors from 'cors';
 import testemonials from "./testimonialsRoutes.js";
 import users from "./userRoutes.js";
-import cors from 'cors';
 import { corOptions } from "../config/cors-options.js";
 
 const routes = (app: any) => {

@@ -14,5 +14,12 @@
             "./src/types",
             "./node_modules/@types"
         ]
-    }
+    },
+    "ts-node": {
+        "transpileOnly": true,
+        "files": true
+    },
+    "exclude": [
+        "**/*.test.ts", "./coverage", "__tests__" ,"jest.config.js"
+    ]
 }

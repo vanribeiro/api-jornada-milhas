@@ -1,0 +1,15 @@
+{
+    "bail": 1,
+    "verbose": true,
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "moduleFileExtensions": [
+        "ts",
+        "js"
+    ],
+    "globals": {
+        "ts-jest": {
+            "tsConfigFile": "tsconfig.json"
+        }
+    }
+}
