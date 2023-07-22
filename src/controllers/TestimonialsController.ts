@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
-import {
-	testimonial,
-	testimonialRepository,
-} from "../repositories/testimonial.js";
+import { testimonialRepository } from "../repositories/testimonial.js";
 import { findOneUser, userRepository } from "../repositories/user.js";
 import Testimonial from "../models/Testimonial.js";
 import { manager } from "../config/data-source.js";
@@ -16,6 +13,7 @@ class TestimonialsControllers {
 				.find({
 					relations: {
 						testemonials: true,
+						photo: true
 					},
 				})
 				.then((users) =>
@@ -33,7 +31,10 @@ class TestimonialsControllers {
 		try {
 			const users: User = await userRepository.findOne({
 				where: { id: id },
-				relations: { testemonials: true },
+				relations: { 
+					testemonials: true,
+					photo: true
+				},
 			});
 
 			return res.status(200).json(users);
@@ -44,14 +45,15 @@ class TestimonialsControllers {
 
 	static async addTestimonial(req: Request, res: Response) {
 		const { userId, text }: any = req.body;
+		const message: string = 'depoimento adicionado com sucesso!';
 
 		try {
 			const user: User = await findOneUser(userId, true);
-			const newTestimonial = testimonial(text, user);
+			const newTestimonial = new Testimonial(text, user);
 			await testimonialRepository.save(newTestimonial);
 			return res
 				.status(200)
-				.json({ message: "depoimento adicionado com sucesso!" });
+				.json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
 		}
@@ -60,6 +62,7 @@ class TestimonialsControllers {
 	static async updateTestimonial(req: Request, res: Response) {
 		const { id }: any = req.params;
 		const { text }: any = req.body;
+		const message: string = 'depoimento atualizado com sucesso!';
 
 		try {
 			const testimonial: Testimonial =
@@ -69,7 +72,7 @@ class TestimonialsControllers {
 			await testimonialRepository.save(testimonial);
 			return res
 				.status(200)
-				.json({ message: `depoimento atualizado com sucesso!` });
+				.json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
 		}
@@ -77,6 +80,7 @@ class TestimonialsControllers {
 
 	static async deleteTestimonial(req: Request, res: Response) {
 		const { id }: any = req.params;
+		const message: string ='depoimento com o id ${id} foi deletado';
 
 		try {
 			const testimonial: Testimonial =
@@ -84,15 +88,16 @@ class TestimonialsControllers {
 			await testimonialRepository.remove(testimonial);
 			return res
 				.status(200)
-				.json({ message: `depoimento com o id ${id} foi deletado` });
+				.json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
 		}
 	}
 
 	static async listThreeRandomTestimonials(_req: Request, res: Response) {
-        const SQL = `SELECT user.name, user.image, testimonial.id, testimonial.text, testimonial.userId 
-                    FROM user INNER JOIN testimonial ON testimonial.userId = user.id ORDER BY RAND() LIMIT 3;`;
+        const SQL = `SELECT testimonial.id, user.name, testimonial.text, image.photo AS avatar FROM user 
+					INNER JOIN testimonial ON testimonial.userId = user.id 
+					INNER JOIN image ON image.id = user.photoId ORDER BY RAND() LIMIT 3;`;
 		try {
 			const users: User = await manager.query(SQL);
 			return res.status(200).json(users);

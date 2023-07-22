@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import User from "../models/User.js";
 import Testimonial from "../models/Testimonial.js";
+import Image from "../models/Image.js";
 const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
@@ -8,7 +9,7 @@ const AppDataSource = new DataSource({
     username: "devenv",
     password: "envdev123",
     database: "jornada_de_milhas",
-    entities: [User, Testimonial],
+    entities: [User, Testimonial, Image],
     synchronize: true,
     logging: false,
 });

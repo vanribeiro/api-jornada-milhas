@@ -32,3 +32,8 @@ Obs: _vou alimentando essa seção a medida que vou realizando o desafio_
 A medida que o desafio vai sendo liberado, estou desenhando o diagrama de realacionamento: 
 
 ![Diagrama de Relacionamento](/extras/[Challenge]%20App%20Jornada%20Milhas.jpeg)
+
+## Outros links
+
+- [Upload de arquivos e imagens utilizando o Multer - express - Node.js](https://consolelog.com.br/upload-de-arquivos-imagens-utilizando-multer-express-nodejs/)
+- [Random users](https://xsgames.co/randomusers/)

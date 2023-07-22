@@ -1,21 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, JoinTable, Relation } from "typeorm";
 import Testimonial from "./Testimonial.js";
+import Image from "./Image.js";
 
 @Entity()
 class User {
-    constructor (name?: string, image?: string) {
+    constructor (name?: string, photo?: Image) {
         this.name = name;
-        this.image = image;
+        this.photo = photo;
     }
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("text")
+    @Column()
     name: string;
 
-    @Column("text")
-    image: string;
+    @OneToOne(() => Image, (image) => image.photo, { cascade: true })
+    @JoinColumn()
+    photo: Relation<Image>;
 
     @OneToMany(() => Testimonial, (testimonial) => testimonial.user, { cascade: true })
     testemonials: Testimonial[];

@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import { AppDataSource } from "../config/data-source.js";
-
-const user: any = (name: string, image: string) => new User(name, image);
+import Image from "../models/Image.js";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -11,4 +10,4 @@ const findOneUser = async (id: number, isARelation: boolean) =>
 		relations: { testemonials: isARelation },
 	});
 
-export { user, userRepository, findOneUser };
+export { userRepository, findOneUser };

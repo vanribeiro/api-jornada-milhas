@@ -7,34 +7,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from "typeorm";
-import Testimonial from "./Testimonial.js";
-import Image from "./Image.js";
-let User = class User {
-    constructor(name, photo) {
-        this.name = name;
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import User from "./User.js";
+let Image = class Image {
+    constructor(photo) {
         this.photo = photo;
     }
 };
 __decorate([
     PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
+], Image.prototype, "id", void 0);
 __decorate([
     Column(),
     __metadata("design:type", String)
-], User.prototype, "name", void 0);
+], Image.prototype, "photo", void 0);
 __decorate([
-    OneToOne(() => Image, (image) => image.photo, { cascade: true }),
-    JoinColumn(),
+    OneToOne(() => User, (user) => user.photo),
     __metadata("design:type", Object)
-], User.prototype, "photo", void 0);
-__decorate([
-    OneToMany(() => Testimonial, (testimonial) => testimonial.user, { cascade: true }),
-    __metadata("design:type", Array)
-], User.prototype, "testemonials", void 0);
-User = __decorate([
+], Image.prototype, "user", void 0);
+Image = __decorate([
     Entity(),
-    __metadata("design:paramtypes", [String, Image])
-], User);
-export default User;
+    __metadata("design:paramtypes", [String])
+], Image);
+export default Image;

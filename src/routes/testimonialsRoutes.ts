@@ -3,10 +3,6 @@ import TestimonialsControllers from "../controllers/TestimonialsController.js";
 
 const router = express.Router();
 
-/**
- * PUT: /depoimentos/1
- */
-
 router
     .get('/depoimentos', TestimonialsControllers.listAllTestimonials)
     .get('/depoimentos-home', TestimonialsControllers.listThreeRandomTestimonials)
