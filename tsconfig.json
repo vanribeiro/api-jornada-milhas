@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "es2017",
-        "module": "esnext",
-        "lib": ["ES6"],
+        "target": "ESNext",
+        "module": "CommonJS",
+        "lib": ["ESNext"],
         "outDir": "build",
         "rootDir": "src",
         "noImplicitAny": true,
@@ -10,6 +10,7 @@
         "moduleResolution":"node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "esModuleInterop": true,
         "typeRoots": [
             "./src/types",
             "./node_modules/@types"
@@ -19,6 +20,9 @@
         "transpileOnly": true,
         "files": true
     },
+    "include": [
+        "src/**/*"
+, "src/server.ts"    ],
     "exclude": [
         "**/*.test.ts", "./coverage", "__tests__" ,"jest.config.js"
     ]

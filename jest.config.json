@@ -1,15 +1,15 @@
 {
     "bail": 1,
     "verbose": true,
+    "clearMocks": true,
     "collectCoverage": true,
     "coverageDirectory": "coverage",
     "moduleFileExtensions": [
         "ts",
-        "js"
+        "js",
+        "json",
+        "node"
     ],
-    "globals": {
-        "ts-jest": {
-            "tsConfigFile": "tsconfig.json"
-        }
-    }
+    "preset": "ts-jest",
+    "testEnvironment": "node"
 }

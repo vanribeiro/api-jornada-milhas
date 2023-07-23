@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { testimonialRepository } from "../repositories/testimonial.js";
-import { findOneUser, userRepository } from "../repositories/user.js";
-import Testimonial from "../models/Testimonial.js";
-import { manager } from "../config/data-source.js";
-import User from "../models/User.js";
+import { testimonialRepository } from "../repositories/testimonial";
+import { findOneUser, userRepository } from "../repositories/user";
+import Testimonial from "../models/Testimonial";
+import { manager } from "../config/data-source";
+import User from "../models/User";
 
 class TestimonialsControllers {
 
@@ -52,7 +52,7 @@ class TestimonialsControllers {
 			const newTestimonial = new Testimonial(text, user);
 			await testimonialRepository.save(newTestimonial);
 			return res
-				.status(200)
+				.status(201)
 				.json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
@@ -71,7 +71,7 @@ class TestimonialsControllers {
 
 			await testimonialRepository.save(testimonial);
 			return res
-				.status(200)
+				.status(201)
 				.json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);

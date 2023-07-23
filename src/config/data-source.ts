@@ -1,20 +1,20 @@
 import { DataSource } from "typeorm";
-import User from "../models/User.js";
-import Testimonial from "../models/Testimonial.js";
-import Image from "../models/Image.js";
+import User from "../models/User";
+import Image from "../models/Image";
+import Testimonial from "../models/Testimonial";
 
-const AppDataSource = new DataSource({
+const appDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
     port: 3306,
     username: "devenv",
     password: "envdev123",
     database: "jornada_de_milhas",
-    entities: [User, Testimonial, Image],
+    entities: [User, Image, Testimonial],
     synchronize: true,
     logging: false,
 });
 
-const manager = AppDataSource.manager;
+const manager = appDataSource.manager;
 
-export { AppDataSource, manager };
+export { appDataSource, manager };

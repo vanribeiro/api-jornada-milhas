@@ -1,7 +1,7 @@
 import express from "express";
-import UsersController from "../controllers/UsersController.js";
+import UsersController from "../controllers/UsersController";
 import multer from 'multer';
-import { storageSettingsUsersAvatar } from "../utils/multer-storage-setting.js";
+import { storageSettingsUsersAvatar } from "../utils/multer-storage-setting";
 
 const storage = multer.diskStorage(storageSettingsUsersAvatar);
 

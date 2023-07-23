@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { port } from '../server.js';
+import { port } from '../server';
 
 let addedFileName = '';
 

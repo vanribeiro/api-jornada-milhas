@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm";
-import User from "./User.js";
+import User from "./User";
 
 @Entity()
 class Testimonial {

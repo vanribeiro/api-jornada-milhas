@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import User from "../models/User.js";
-import Image from "../models/Image.js";
-import { userRepository } from "../repositories/user.js";
-import { imageRepository } from "../repositories/image.js";
-import { addedFileName } from "../utils/multer-storage-setting.js";
-import { manager } from "../config/data-source.js";
-import deleteFile from "../utils/delete-file.js";
+import User from "../models/User";
+import Image from "../models/Image";
+import { userRepository } from "../repositories/user";
+import { imageRepository } from "../repositories/image";
+import { addedFileName } from "../utils/multer-storage-setting";
+import { manager } from "../config/data-source";
+import deleteFile from "../utils/delete-file";
 
 class UsersController {
 
@@ -31,7 +31,7 @@ class UsersController {
 		try {
 			await userRepository.save(newUser);
 			await imageRepository.save(newImage);
-			return res.status(200).json({ message: message });
+			return res.status(201).json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
 		}
@@ -78,7 +78,7 @@ class UsersController {
 			await imageRepository.save(imageToUpdate);
 			await userRepository.save(userToUpdate);
 
-			return res.status(200).json({ message: message });
+			return res.status(201).json({ message: message });
 		} catch (error) {
 			return res.status(500).json(error.message);
 		}
@@ -87,7 +87,7 @@ class UsersController {
 	static async deleteUser(req: Request, res: Response) {
 		const { id }: any = req.params;
         const SQL: string = `SELECT photoId FROM user WHERE id = ${id};`;
-		const message: string = `pessoa com o id ${id} foi deletado`;
+		const message: string = `usuario com o id ${id} foi deletado`;
 
 		try {
             const photoId: number = await manager

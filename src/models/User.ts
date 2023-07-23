@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, JoinTable, Relation } from "typeorm";
-import Testimonial from "./Testimonial.js";
-import Image from "./Image.js";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, Relation } from "typeorm";
+import Testimonial from "./Testimonial";
+import Image from "./Image";
 
 @Entity()
 class User {

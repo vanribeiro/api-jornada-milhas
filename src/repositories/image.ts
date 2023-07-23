@@ -1,7 +1,7 @@
-import { AppDataSource } from "../config/data-source.js";
+import { appDataSource } from "../config/data-source";
 import { Repository } from "typeorm";
-import Image from "../models/Image.js";
+import Image from "../models/Image";
 
-const imageRepository: Repository<Image> = AppDataSource.getRepository(Image);
+const imageRepository: Repository<Image> = appDataSource.getRepository(Image);
 
 export { imageRepository };

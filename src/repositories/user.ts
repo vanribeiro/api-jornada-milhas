@@ -1,8 +1,7 @@
-import User from "../models/User.js";
-import { AppDataSource } from "../config/data-source.js";
-import Image from "../models/Image.js";
+import User from "../models/User";
+import { appDataSource } from "../config/data-source";
 
-const userRepository = AppDataSource.getRepository(User);
+const userRepository = appDataSource.getRepository(User);
 
 const findOneUser = async (id: number, isARelation: boolean) =>
 	await userRepository.findOne({

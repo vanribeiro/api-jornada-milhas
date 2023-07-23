@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
-import User from "./User.js";
+import User from "./User";
 
 @Entity()
 class Image {

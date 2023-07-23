@@ -1,8 +1,8 @@
-import Testimonial from "../models/Testimonial.js";
-import { AppDataSource } from "../config/data-source.js";
+import Testimonial from "../models/Testimonial";
+import { appDataSource } from "../config/data-source";
 import { Repository } from "typeorm";
 
 const testimonialRepository: Repository<Testimonial> =
-	AppDataSource.getRepository(Testimonial);
+	appDataSource.getRepository(Testimonial);
 
 export { testimonialRepository };
