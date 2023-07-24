@@ -13,7 +13,7 @@ class Image {
     @Column()
     photo: string;
 
-    @OneToOne(() => User, (user) => user.photo)
+    @OneToOne(() => User, (user) => user.photo, { onDelete: "CASCADE" })
     user: Relation<User>;
 }
 

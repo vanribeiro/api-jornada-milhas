@@ -34,7 +34,7 @@ describe('GET /usuarios', () => {
             photoId: 22
         });
 
-        const newImage: Image = new Image('uma_imagem_qualquer.png');
+        const newImage: Image = new Image('http://localhost:3000/users/avatars/mock.jpg');
         await imageRepository.save(newImage);
         expect(responseUser.statusCode).toBe(201);
 
