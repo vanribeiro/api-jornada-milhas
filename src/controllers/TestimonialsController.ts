@@ -50,13 +50,17 @@ class TestimonialsControllers {
 
 			return user
 				? res.status(200).json(user)
-				: next(new NotFound(`usuario com o ${id} não encontrado`));
+				: next(new NotFound(`usuario com o id ${id} não encontrado`));
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async addTestimonial(req: Request, res: Response) {
+	static async addTestimonial(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) {
 		const { userId, text }: any = req.body;
 		const message: string = "depoimento adicionado com sucesso!";
 
@@ -67,11 +71,15 @@ class TestimonialsControllers {
 
 			return res.status(201).json({ message: message });
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async updateTestimonial(req: Request, res: Response) {
+	static async updateTestimonial(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) {
 		const { id }: any = req.params;
 		const { text }: any = req.body;
 		const message: string = "depoimento atualizado com sucesso!";
@@ -79,50 +87,61 @@ class TestimonialsControllers {
 		try {
 			const testimonial: Testimonial =
 				await testimonialRepository.findOneBy({ id });
-
 			if (testimonial) {
 				testimonial.text = text;
 				await testimonialRepository.save(testimonial);
 				return res.status(201).json({ message: message });
 			} else {
-				return res.status(404).send({});
+				return next(
+					new NotFound(`depoimento com o id ${id} não encontrado`)
+				);
 			}
 		} catch (error) {
-			return res.status(500).json(error.message);
+			console.log(error);
+			return next(error);
 		}
 	}
 
-	static async deleteTestimonial(req: Request, res: Response) {
+	static async deleteTestimonial(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) {
 		const { id }: any = req.params;
 		const message: string = "depoimento com o id ${id} foi deletado";
 
 		try {
 			const testimonial: Testimonial =
 				await testimonialRepository.findOneBy({ id });
-			if (testimonial) {
+				
+			if(testimonial){
 				await testimonialRepository.remove(testimonial);
-				return res.status(200).json({ message: message });
+				return res.status(201).json({ message: message })
 			} else {
-				return res.status(404).send({});
+				next(new NotFound(`depoimento com o id ${id} não encontrado`));
 			}
+
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async listThreeRandomTestimonials(_req: Request, res: Response) {
+	static async listThreeRandomTestimonials(
+		_req: Request,
+		res: Response,
+		next: NextFunction
+	) {
 		const SQL = `SELECT testimonial.id, user.name, testimonial.text, image.photo AS avatar FROM user 
 					INNER JOIN testimonial ON testimonial.userId = user.id 
 					INNER JOIN image ON image.id = user.photoId ORDER BY RAND() LIMIT 3;`;
 		try {
-			const users: User = await manager.query(SQL);
-			if (users) {
-				return res.status(200).json(users);
-			} else {
-				return res.status(404).send([]);
-			}
+			const users: User[] = await manager.query(SQL);
+
+			return users.length > 0
+				? res.status(200).json(users)
+				: res.status(404).send([]);
 		} catch (error) {
-			return res.status(500).json(error.message);
+			next(error);
 		}
 	}
 }

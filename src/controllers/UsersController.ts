@@ -5,31 +5,25 @@ import { userRepository } from "../repositories/user";
 import { imageRepository } from "../repositories/image";
 import { addedFilename } from "../utils/multer-storage-setting";
 import ImagesController from "./ImagesController";
+import NotFound from "../errors/NotFound";
 
 class UsersController {
-
 	static async listUsers(_req: Request, res: Response, next: NextFunction) {
-
 		try {
-			
 			const users: User[] = await userRepository.find({
 				relations: {
 					photo: true,
 				},
 			});
-
-			if(users.length > 0){
-				return res.status(200).json(users);
-			} else {
-				return res.status(404).send([]);
-			}
-			
+			return users.length > 0
+				? res.status(200).json(users)
+				: res.status(404).send([]);
 		} catch (error) {
 			next(error);
 		}
 	}
 
-	static async addUser(req: Request, res: Response) {
+	static async addUser(req: Request, res: Response, next: NextFunction) {
 		const { name }: any = req.body;
 		const newImage: Image = new Image(addedFilename);
 		const newUser: User = new User(name, newImage);
@@ -41,11 +35,11 @@ class UsersController {
 
 			return res.status(201).json({ message: message });
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async findOneUser(req: Request, res: Response) {
+	static async findOneUser(req: Request, res: Response, next: NextFunction) {
 		const { id }: any = req.params;
 
 		try {
@@ -56,67 +50,67 @@ class UsersController {
 				},
 			});
 
-			if(user.length > 0) {
-				return res.status(200).json(user);
-			} else {
-				return res.status(404).send([]);
-			}
-
+			return user.length > 0
+				? res.status(200).json(user)
+				: res.status(404).send([]);
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async updateUser(req: Request, res: Response) {
+	static async updateUser(req: Request, res: Response, next: NextFunction) {
 		const { name }: any = req.body;
 		const { id }: any = req.params;
 		const message: string = "usuario atualizado com sucesso!";
 
 		try {
-
 			const user: User = await userRepository.findOneBy({ id });
 
-			if(user) {
+			if (user) {
 				user.name = name;
-	
+
 				await userRepository.save(user);
 				await ImagesController.updateImage(id, addedFilename);
-	
+
 				return res.status(201).json({ message: message });
 			} else {
-				return res.status(404).send({});
+				return next(
+					new NotFound(`usuario com o id ${id} não encontrado`)
+				);
 			}
-
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 
-	static async deleteUser(req: Request, res: Response) {
+	static async deleteUser(req: Request, res: Response, next: NextFunction) {
 		const { id }: any = req.params;
 
 		const message: string = `usuario com o id ${id} foi deletado`;
 
 		try {
+			const user: User = await userRepository.findOne({
+				where: { id: id },
+			});
 
-			const user: User = await userRepository.findOne({ where: { id: id } });
-			
-			if(user){
+			if (user) {
 				const photoId = user.photo.id;
 				const photoUrl = user.photo.photo;
-				
+
 				const result = await imageRepository.delete(photoId);
-				const imageToBeDeleted = await ImagesController?.deleteImageFromFolder(photoUrl);
-				
-				if(imageToBeDeleted && result.affected === 1) {
+				const imageToBeDeleted =
+					await ImagesController?.deleteImageFromFolder(photoUrl);
+
+				if (imageToBeDeleted && result.affected === 1) {
 					return res.status(200).json({ message: message });
 				}
 			} else {
-				return res.status(404).send({});
+				return next(
+					new NotFound(`usuario com o id ${id} não encontrado`)
+				);
 			}
-
 		} catch (error) {
-			return res.status(500).json(error.message);
+			return next(error);
 		}
 	}
 }
