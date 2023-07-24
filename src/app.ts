@@ -12,8 +12,10 @@ appDataSource.initialize()
 const app = express();
 
 routes(app);
+
 app.use(express.json());
 app.use(handle404);
 app.use(handleErrors);
+
 
 export default app;

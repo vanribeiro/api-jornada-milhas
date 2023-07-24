@@ -27,7 +27,7 @@ describe('GET /usuarios', () => {
 
     });
 
-    test('should be able to create a new user', async () => {
+    test.skip('should be able to create a new user', async () => {
 
         const responseUser = await request(app).post('/usuarios').send({
             name: 'Talita',

@@ -66,10 +66,22 @@ class TestimonialsControllers {
 
 		try {
 			const user: User = await findOneUser(userId, true);
-			const newTestimonial = new Testimonial(text, user);
-			await testimonialRepository.save(newTestimonial);
-
-			return res.status(201).json({ message: message });
+			if (user) {
+				const newTestimonial = new Testimonial(text, user);
+				const addedTestimonial = await testimonialRepository.save(
+					newTestimonial
+				);
+				return res.status(201).json({
+					message: message,
+					testimonialId: addedTestimonial.id,
+				});
+			} else {
+				return next(
+					new NotFound(
+						`Não foi possível adicionar depoimento. Id ${userId} não encontrado.`
+					)
+				);
+			}
 		} catch (error) {
 			return next(error);
 		}
@@ -89,15 +101,19 @@ class TestimonialsControllers {
 				await testimonialRepository.findOneBy({ id });
 			if (testimonial) {
 				testimonial.text = text;
-				await testimonialRepository.save(testimonial);
-				return res.status(201).json({ message: message });
+				const updatedTestimonial = await testimonialRepository.save(
+					testimonial
+				);
+				return res.status(201).json({
+					message: message,
+					testimonialId: updatedTestimonial.id,
+				});
 			} else {
 				return next(
 					new NotFound(`depoimento com o id ${id} não encontrado`)
 				);
 			}
 		} catch (error) {
-			console.log(error);
 			return next(error);
 		}
 	}
@@ -108,19 +124,18 @@ class TestimonialsControllers {
 		next: NextFunction
 	) {
 		const { id }: any = req.params;
-		const message: string = "depoimento com o id ${id} foi deletado";
+		const message: string = `depoimento com o id ${id} foi deletado`;
 
 		try {
 			const testimonial: Testimonial =
 				await testimonialRepository.findOneBy({ id });
-				
-			if(testimonial){
+
+			if (testimonial) {
 				await testimonialRepository.remove(testimonial);
-				return res.status(201).json({ message: message })
+				return res.status(200).json({ message: message });
 			} else {
 				next(new NotFound(`depoimento com o id ${id} não encontrado`));
 			}
-
 		} catch (error) {
 			return next(error);
 		}

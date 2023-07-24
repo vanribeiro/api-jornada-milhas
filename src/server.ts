@@ -1,7 +1,7 @@
 import app from "./app";
 import http from "http";
 
-const port: number = 3000 | Number(process.env.PORT);
+const port: number = 8080 | Number(process.env.PORT);
 
 if(process.env.NODE_ENV !== 'test') {
 

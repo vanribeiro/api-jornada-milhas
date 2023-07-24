@@ -3,6 +3,10 @@ import User from "../models/User";
 import Image from "../models/Image";
 import Testimonial from "../models/Testimonial";
 
+const entities = [
+    User, Image, Testimonial
+]
+
 const appDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
@@ -10,7 +14,7 @@ const appDataSource = new DataSource({
     username: "devenv",
     password: "envdev123",
     database: "jornada_de_milhas",
-    entities: [User, Image, Testimonial],
+    entities: entities,
     synchronize: true,
     logging: false,
 });
