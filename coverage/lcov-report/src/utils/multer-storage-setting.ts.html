@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -88,50 +88,50 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { randomBytes } from 'crypto';
 import { port } from '../server';
 &nbsp;
 let addedFilename = '';
 &nbsp;
 const storageSettingsUsersAvatar = {
-    destination: <span class="fstat-no" title="function not covered" >function (_</span>req: any, _file: any, callback: (arg0: null, arg1: string) =&gt; void) {
-        const PATH = <span class="cstat-no" title="statement not covered" >'uploads/users/avatars/';</span>
-<span class="cstat-no" title="statement not covered" >        callback(null, `${PATH}`);</span>
+    destination: function (_req: any, _file: any, callback: (arg0: null, arg1: string) =&gt; void) {
+        const PATH = 'uploads/users/avatars/';
+        callback(null, `${PATH}`);
     },
-    filename: <span class="fstat-no" title="function not covered" >function (_</span>req: any, file: any, callback: (arg0: null, arg1: string) =&gt; void) {
+    filename: function (_req: any, file: any, callback: (arg0: null, arg1: string) =&gt; void) {
 &nbsp;
-        const extesionFile = <span class="cstat-no" title="statement not covered" >file.originalname.split('.')[1];</span>
-        const newFilename = <span class="cstat-no" title="statement not covered" >randomBytes(32).toString('base64');</span>
-        const fullFilename = <span class="cstat-no" title="statement not covered" >`${newFilename}.${extesionFile}`;</span>
+        const extesionFile = file.originalname.split('.')[1];
+        const newFilename = randomBytes(32).toString('base64');
+        const fullFilename = `${newFilename}.${extesionFile}`;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        addedFilename = `http://localhost:${port}/users/avatars/${fullFilename}`;</span>
+        addedFilename = `http://localhost:${port}/users/avatars/${fullFilename}`;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        callback(null, fullFilename);</span>
+        callback(null, fullFilename);
     }
 }
 &nbsp;
@@ -145,7 +145,7 @@ export {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-24T23:50:17.408Z
+                at 2023-07-25T05:34:09.664Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

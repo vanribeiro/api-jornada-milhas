@@ -7,7 +7,8 @@ class ImagesController {
 	static async addImage(newImage: Image) {
 
 		try {
-			await imageRepository.save(newImage);
+			const image = await imageRepository.save(newImage);
+			return { id: image.id };
 		} catch (error) {
 			throw error;
 		}
@@ -23,7 +24,8 @@ class ImagesController {
 			});
 			image.photo = addedFileName;
 
-			await imageRepository.save(image);
+			const imageUpdated = await imageRepository.save(image);
+			return { id: imageUpdated.id }
 		} catch (error) {
 			throw error;
 		}

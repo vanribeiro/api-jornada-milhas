@@ -4,6 +4,10 @@
     "clearMocks": true,
     "collectCoverage": true,
     "coverageDirectory": "coverage",
+    "coveragePathIgnorePatterns": [
+        "node_modules",
+        "<rootDir>/src/server.ts"
+    ],
     "moduleFileExtensions": [
         "ts",
         "js",

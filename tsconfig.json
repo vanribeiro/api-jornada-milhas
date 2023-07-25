@@ -20,9 +20,7 @@
         "transpileOnly": true,
         "files": true
     },
-    "include": [
-        "src/**/*"
-, "src/server.ts"    ],
+    "include": [ "src/**/*", "src/server.ts"],
     "exclude": [
         "**/*.test.ts", "./coverage", "__tests__" ,"jest.config.js"
     ]

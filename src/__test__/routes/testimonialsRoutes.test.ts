@@ -5,7 +5,6 @@ import { appDataSource } from "../../config/data-source";
 
 let server: any;
 let testimonialAddedId: any;
-let testimonialUpdatedId: any;
 
 beforeEach(async () => {
 	const PORT = 3000;

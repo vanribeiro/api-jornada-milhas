@@ -23,22 +23,6 @@ class UsersController {
 		}
 	}
 
-	static async addUser(req: Request, res: Response, next: NextFunction) {
-		const { name }: any = req.body;
-		const newImage: Image = new Image(addedFilename);
-		const newUser: User = new User(name, newImage);
-		const message: string = "usuario adicionado com sucesso!";
-
-		try {
-			await userRepository.save(newUser);
-			await ImagesController.addImage(newImage);
-
-			return res.status(201).json({ message: message });
-		} catch (error) {
-			return next(error);
-		}
-	}
-
 	static async findOneUser(req: Request, res: Response, next: NextFunction) {
 		const { id }: any = req.params;
 
@@ -58,6 +42,26 @@ class UsersController {
 		}
 	}
 
+	static async addUser(req: Request, res: Response, next: NextFunction) {
+		const { name }: any = req.body;
+		const newImage: Image = new Image(addedFilename);
+		const newUser: User = new User(name, newImage);
+		const message: string = "usuario adicionado com sucesso!";
+
+		try {
+			const userAdded = await userRepository.save(newUser);
+			const imageAdded = await ImagesController.addImage(newImage);
+
+			return res.status(201).json({
+				message: message,
+				userId: userAdded.id,
+				imageId: imageAdded.id,
+			});
+		} catch (error) {
+			return next(error);
+		}
+	}
+
 	static async updateUser(req: Request, res: Response, next: NextFunction) {
 		const { name }: any = req.body;
 		const { id }: any = req.params;
@@ -69,10 +73,19 @@ class UsersController {
 			if (user) {
 				user.name = name;
 
-				await userRepository.save(user);
-				await ImagesController.updateImage(id, addedFilename);
+				const userUpdated = await userRepository.save(user);
+				const imageUpdated = await ImagesController.updateImage(
+					id,
+					addedFilename
+				);
 
-				return res.status(201).json({ message: message });
+				return res
+					.status(201)
+					.json({
+						message: message,
+						userId: userUpdated.id,
+						imageId: imageUpdated.id,
+					});
 			} else {
 				return next(
 					new NotFound(`usuario com o id ${id} não encontrado`)
