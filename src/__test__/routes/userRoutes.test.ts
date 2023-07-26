@@ -10,7 +10,7 @@ import User from "../../models/User";
 
 let server: any;
 let userAddedId: any;
-const PORT = 3000 || process.env.PORT;
+const PORT = 8080 || process.env.PORT;
 
 beforeEach(async () => {
 	server = http.createServer(app).listen(PORT);

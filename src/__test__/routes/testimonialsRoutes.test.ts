@@ -7,7 +7,7 @@ let server: any;
 let testimonialAddedId: any;
 
 beforeEach(async () => {
-	const PORT = 3000;
+	const PORT = 8080;
 	server = http.createServer(app).listen(PORT);
 	await appDataSource.initialize();
 });
