@@ -15,14 +15,14 @@ class ImagesController {
 
 	}
 
-	static async updateImage(id: number, addedFileName: string) {
+	static async updateImage(id: number, filename: string) {
 
 		try {
 			const photoId: number = await ImagesController.findId(id);
 			const image: Image = await imageRepository.findOneBy({
 				id: photoId,
 			});
-			image.photo = addedFileName;
+			image.photo = filename;
 
 			const imageUpdated = await imageRepository.save(image);
 			return { id: imageUpdated.id }
@@ -42,8 +42,8 @@ class ImagesController {
 				const imageSplit = imagePath.split("/");
 				const filename = imageSplit.at(-1);
 				const result = await deleteFile(`uploads/users/avatars/${filename}`);
-				console.log(result)
-				return result;
+				console.log(!result)
+				return !result;
 			}
 
 		} catch (error) {

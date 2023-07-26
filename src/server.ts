@@ -1,7 +1,10 @@
 import app from "./app";
 import http from "http";
+import dotenv from 'dotenv';
 
-const port: number = Number(process.env.PORT) | 3000;
+dotenv.config();
+
+const port: number = Number(process.env.PORT) || 8120;
 
 if(process.env.NODE_ENV !== 'test') {
 
@@ -9,8 +12,4 @@ if(process.env.NODE_ENV !== 'test') {
         console.log(`listening at http://localhost:${port}`);
     });
 
-}
-
-export {
-    port
 }

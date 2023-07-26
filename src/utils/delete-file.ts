@@ -5,7 +5,7 @@ async function deleteFile(filenamePath: string) {
 	try {
         await unlink(filenamePath);
         console.log(`imagem foi deletada!`);
-        return fileExists(filenamePath);
+        return await fileExists(filenamePath) ? true : false;
     } catch (error) {
         throw error;
     }

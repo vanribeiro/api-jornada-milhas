@@ -3,20 +3,27 @@ import User from "../models/User";
 import Image from "../models/Image";
 import { userRepository } from "../repositories/user";
 import { imageRepository } from "../repositories/image";
-import { addedFilename } from "../utils/multer-storage-setting";
 import ImagesController from "./ImagesController";
 import NotFound from "../errors/NotFound";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 class UsersController {
-	static async listUsers(_req: Request, res: Response, next: NextFunction) {
+	static async listUsers(req: Request, res: Response, next: NextFunction) {
 		try {
 			const users: User[] = await userRepository.find({
 				relations: {
 					photo: true,
 				},
 			});
-			return users.length > 0
-				? res.status(200).json(users)
+
+			const usersMapped = users.map((user) =>
+				mapUser(req.hostname, user)
+			);
+
+			return usersMapped.length > 0
+				? res.status(200).json(usersMapped)
 				: res.status(404).send([]);
 		} catch (error) {
 			next(error);
@@ -34,8 +41,10 @@ class UsersController {
 				},
 			});
 
-			return user.length > 0
-				? res.status(200).json(user)
+			const userMapped = user.map((user) => mapUser(req.hostname, user));
+
+			return userMapped.length > 0
+				? res.status(200).json(userMapped)
 				: res.status(404).send([]);
 		} catch (error) {
 			return next(error);
@@ -43,8 +52,9 @@ class UsersController {
 	}
 
 	static async addUser(req: Request, res: Response, next: NextFunction) {
+		const { filename }: Express.Multer.File = req.file;
 		const { name }: any = req.body;
-		const newImage: Image = new Image(addedFilename);
+		const newImage: Image = new Image(filename);
 		const newUser: User = new User(name, newImage);
 		const message: string = "usuario adicionado com sucesso!";
 
@@ -63,6 +73,7 @@ class UsersController {
 	}
 
 	static async updateUser(req: Request, res: Response, next: NextFunction) {
+		const { filename }: Express.Multer.File = req.file;
 		const { name }: any = req.body;
 		const { id }: any = req.params;
 		const message: string = "usuario atualizado com sucesso!";
@@ -73,19 +84,17 @@ class UsersController {
 			if (user) {
 				user.name = name;
 
-				const userUpdated = await userRepository.save(user);
+				await userRepository.save(user);
 				const imageUpdated = await ImagesController.updateImage(
 					id,
-					addedFilename
+					filename
 				);
 
-				return res
-					.status(201)
-					.json({
-						message: message,
-						userId: userUpdated.id,
-						imageId: imageUpdated.id,
-					});
+				return res.status(201).json({
+					message: message,
+					userId: id,
+					imageId: imageUpdated.id,
+				});
 			} else {
 				return next(
 					new NotFound(`usuario com o id ${id} não encontrado`)
@@ -127,5 +136,19 @@ class UsersController {
 		}
 	}
 }
+
+const mapUser = (hostname: string, user: User) => {
+	const PORT: string = `:${process.env.PORT}`;
+	const filename: string = user.photo.photo;
+
+	return {
+		id: user.id,
+		name: user.name,
+		photot: {
+			id: user.photo.id,
+			photo: `http://${hostname}${PORT}/users/avatars/${filename}`,
+		},
+	};
+};
 
 export default UsersController;
