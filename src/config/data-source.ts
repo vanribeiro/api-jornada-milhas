@@ -2,6 +2,9 @@ import { DataSource } from "typeorm";
 import User from "../models/User";
 import Image from "../models/Image";
 import Testimonial from "../models/Testimonial";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const entities = [
     User, Image, Testimonial

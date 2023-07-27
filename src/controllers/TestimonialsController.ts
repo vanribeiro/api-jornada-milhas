@@ -5,10 +5,12 @@ import Testimonial from "../models/Testimonial";
 import { manager } from "../config/data-source";
 import User from "../models/User";
 import NotFound from "../errors/NotFound";
+import ErrorBase from "../errors/ErrorBase";
+import { mapTestimonial, mapUser } from "../utils/mappers";
 
 class TestimonialsControllers {
 	static async listAllTestimonials(
-		_req: Request,
+		req: Request,
 		res: Response,
 		next: NextFunction
 	) {
@@ -16,16 +18,18 @@ class TestimonialsControllers {
 			const users: User[] = await userRepository
 				.find({
 					relations: {
-						testemonials: true,
+						testimonials: true,
 						photo: true,
 					},
 				})
 				.then((users) =>
-					users.filter((user) => user.testemonials.length !== 0)
+					users.filter((user) => user.testimonials.length !== 0)
 				);
 
+			const mappedTestimonials = users.map(user => mapTestimonial(req.hostname, user));
+
 			return users.length > 0
-				? res.status(200).json(users)
+				? res.status(200).json(mappedTestimonials)
 				: next(new NotFound());
 		} catch (error) {
 			next(error);
@@ -40,16 +44,18 @@ class TestimonialsControllers {
 		const { id }: any = req.params;
 
 		try {
-			const user: User = await userRepository.findOne({
+			const users: User[] = await userRepository.find({
 				where: { id: id },
 				relations: {
-					testemonials: true,
+					testimonials: true,
 					photo: true,
 				},
 			});
 
-			return user
-				? res.status(200).json(user)
+		const mappedTestimonial = users.map((user) => mapUser(req.hostname, user));
+
+			return users
+				? res.status(200).json(mappedTestimonial)
 				: next(new NotFound(`usuario com o id ${id} não encontrado`));
 		} catch (error) {
 			return next(error);
@@ -83,6 +89,9 @@ class TestimonialsControllers {
 				);
 			}
 		} catch (error) {
+			if(userId === '' || text === '') {
+				return next(new ErrorBase('Corpo da requisição vazio', 400))
+			}
 			return next(error);
 		}
 	}
@@ -104,7 +113,7 @@ class TestimonialsControllers {
 				const updatedTestimonial = await testimonialRepository.save(
 					testimonial
 				);
-				return res.status(201).json({
+				return res.status(204).json({
 					message: message,
 					testimonialId: updatedTestimonial.id,
 				});

@@ -4,7 +4,6 @@ describe('Check if a file exists or not: fileExists(filenamePath)', () => {
 
     test('should return true if file exists', async () => {
         const filenamePath = "src/__test__/routes/mocks/avatar.jpg";
-        console.log(filenamePath);
         const result: boolean = await fileExists(filenamePath);
         expect(result).toBeTruthy();
     });

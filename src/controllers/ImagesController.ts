@@ -4,6 +4,7 @@ import { imageRepository } from "../repositories/image";
 import deleteFile from "../utils/delete-file";
 
 class ImagesController {
+	
 	static async addImage(newImage: Image) {
 
 		try {
@@ -32,17 +33,14 @@ class ImagesController {
 
 	}
 
-	static async deleteImageFromFolder(imagePath: string) {
+	static async deleteImageFromFolder(photoName: string) {
 
 		try {
 
-			if(imagePath === null || imagePath === undefined) {
+			if(photoName === null || photoName === undefined) {
 				return null;
 			} else {
-				const imageSplit = imagePath.split("/");
-				const filename = imageSplit.at(-1);
-				const result = await deleteFile(`uploads/users/avatars/${filename}`);
-				console.log(!result)
+				const result = await deleteFile(`uploads/users/avatars/${photoName}`);
 				return !result;
 			}
 

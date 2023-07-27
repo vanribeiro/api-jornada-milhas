@@ -6,6 +6,8 @@ import { imageRepository } from "../repositories/image";
 import ImagesController from "./ImagesController";
 import NotFound from "../errors/NotFound";
 import dotenv from "dotenv";
+import ErrorBase from "../errors/ErrorBase";
+import { mapUser } from "../utils/mappers";
 
 dotenv.config();
 
@@ -52,48 +54,60 @@ class UsersController {
 	}
 
 	static async addUser(req: Request, res: Response, next: NextFunction) {
-		const { filename }: Express.Multer.File = req.file;
+		const { filename }: any = req.file;
 		const { name }: any = req.body;
 		const newImage: Image = new Image(filename);
 		const newUser: User = new User(name, newImage);
 		const message: string = "usuario adicionado com sucesso!";
 
 		try {
-			const userAdded = await userRepository.save(newUser);
-			const imageAdded = await ImagesController.addImage(newImage);
+			let imageAdded;
+			let userAdded;
 
+			if(name) userAdded = await userRepository.save(newUser);
+
+			if(filename) imageAdded = await ImagesController.addImage(newImage);
+			
 			return res.status(201).json({
 				message: message,
 				userId: userAdded.id,
 				imageId: imageAdded.id,
 			});
+
 		} catch (error) {
+			if(name === '') {
+				return next(new ErrorBase('Corpo da requisição vazio', 400));
+			}
 			return next(error);
 		}
 	}
 
 	static async updateUser(req: Request, res: Response, next: NextFunction) {
-		const { filename }: Express.Multer.File = req.file;
+		const { filename }: any = req.file || "";
 		const { name }: any = req.body;
 		const { id }: any = req.params;
 		const message: string = "usuario atualizado com sucesso!";
 
 		try {
 			const user: User = await userRepository.findOneBy({ id });
+			let imageUpdated: any;
 
 			if (user) {
 				user.name = name;
 
 				await userRepository.save(user);
-				const imageUpdated = await ImagesController.updateImage(
-					id,
-					filename
-				);
+
+				if (filename) {
+					imageUpdated = await ImagesController.updateImage(
+						id,
+						filename
+					);
+				}
 
 				return res.status(201).json({
 					message: message,
 					userId: id,
-					imageId: imageUpdated.id,
+					imageId: imageUpdated?.id,
 				});
 			} else {
 				return next(
@@ -117,11 +131,11 @@ class UsersController {
 
 			if (user) {
 				const photoId = user.photo.id;
-				const photoUrl = user.photo.photo;
+				const photoName = user.photo.photo;
 
 				const result = await imageRepository.delete(photoId);
 				const imageToBeDeleted =
-					await ImagesController?.deleteImageFromFolder(photoUrl);
+					await ImagesController?.deleteImageFromFolder(photoName);
 
 				if (imageToBeDeleted && result.affected === 1) {
 					return res.status(200).json({ message: message });
@@ -137,18 +151,6 @@ class UsersController {
 	}
 }
 
-const mapUser = (hostname: string, user: User) => {
-	const PORT: string = `:${process.env.PORT}`;
-	const filename: string = user.photo.photo;
 
-	return {
-		id: user.id,
-		name: user.name,
-		photot: {
-			id: user.photo.id,
-			photo: `http://${hostname}${PORT}/users/avatars/${filename}`,
-		},
-	};
-};
 
 export default UsersController;

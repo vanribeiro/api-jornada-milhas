@@ -23,6 +23,7 @@ Aqui estão registrados alguns links, pelos menos os que consegui lembrar, que c
 - [Testes de integração em Javascript com Supertest e Jest](https://blog.innovaconnect.com.br/testes-de-integra%C3%A7%C3%A3o-em-javascript-com-supertest-e-jest-da07499affaa)
 - [How to use Jest & Supertest to Test an Express Server in TypeScript](https://blog.devgenius.io/how-to-use-jest-supertest-to-test-an-express-server-in-typescript-ab4fc73524e3)
 - [Jest, ExpressJS and the EADDRINUSE error](https://blog.campvanilla.com/jest-expressjs-and-the-eaddrinuse-error-bac39356c33a)
+- [How to mock multer with supertest?](https://stackoverflow.com/questions/47040761/how-to-mock-multer-with-supertest)
 
 ## Miscelânea
 - [Random users](https://xsgames.co/randomusers/)

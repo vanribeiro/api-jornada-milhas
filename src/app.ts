@@ -1,19 +1,23 @@
 import express from 'express';
 import routes from './routes';
-import { appDataSource } from './config/data-source';
-import "reflect-metadata";
 import handle404 from './middlewares/handle404';
 import handleErrors from './middlewares/handleErrors';
+import cors, { CorsOptions } from 'cors';
+import dotenv from 'dotenv';
 
-appDataSource.initialize()
-    .then(() => { console.log("Banco de dados conectado!"); })
-    .catch((error) => console.log(error));
+dotenv.config();
+
+const whiteList = process.env.CORS_ORIGINS_ALLOWED.split(';');
+const allowedMethods = process.env.CORS_METHOD_ALLOWED.split(',');
+
+const corOptions : CorsOptions =  {
+    methods: allowedMethods,
+    origin: whiteList
+}
 
 const app = express();
-
+app.use(cors(corOptions));
 routes(app);
-
-app.use(express.json());
 app.use(handle404);
 app.use(handleErrors);
 

@@ -34,7 +34,7 @@ class User {
 	@OneToMany(() => Testimonial, (testimonial) => testimonial.user, {
 		cascade: true,
 	})
-	testemonials: Testimonial[];
+	testimonials: Testimonial[];
 }
 
 export default User;
