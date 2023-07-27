@@ -14,7 +14,7 @@ class Testimonial {
     @Column('mediumtext')
     text: string;
 
-    @ManyToOne(() => User, (user) => user.testemonials)
+    @ManyToOne(() => User, (user) => user.testimonials)
     user: Relation<User>;
 }
 
