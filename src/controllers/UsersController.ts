@@ -94,7 +94,6 @@ class UsersController {
 
 			if (user) {
 				user.name = name;
-
 				await userRepository.save(user);
 
 				if (filename) {

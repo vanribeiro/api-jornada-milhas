@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "test": "jest --watchAll --forceExit --detectOpenHandles --maxWorkers=1 --coverage=false",
-    "test-coverage": "jest --watchAll --forceExit --detectOpenHandles --maxWorkers=1",
+    "test-coverage": "jest --forceExit --detectOpenHandles --maxWorkers=1",
     "build": "tsc",
     "start": "nodemon --watch src/ --exec ts-node src/server.ts -e ts"
   },

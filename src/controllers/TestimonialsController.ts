@@ -6,7 +6,7 @@ import { manager } from "../config/data-source";
 import User from "../models/User";
 import NotFound from "../errors/NotFound";
 import ErrorBase from "../errors/ErrorBase";
-import { mapTestimonial, mapUser } from "../utils/mappers";
+import { mapTestimonial } from "../utils/mappers";
 
 class TestimonialsControllers {
 	static async listAllTestimonials(
@@ -26,11 +26,17 @@ class TestimonialsControllers {
 					users.filter((user) => user.testimonials.length !== 0)
 				);
 
-			const mappedTestimonials = users.map(user => mapTestimonial(req.hostname, user));
+			if(users.length > 0) {
 
-			return users.length > 0
-				? res.status(200).json(mappedTestimonials)
-				: next(new NotFound());
+				const mappedTestimonials = users.map((user) =>
+					mapTestimonial(req.hostname, user)
+				);
+
+				return res.status(200).json(mappedTestimonials);
+			} else {
+				return next(new NotFound());
+			}
+
 		} catch (error) {
 			next(error);
 		}
@@ -44,7 +50,7 @@ class TestimonialsControllers {
 		const { id }: any = req.params;
 
 		try {
-			const users: User[] = await userRepository.find({
+			const users: User = await userRepository.findOne({
 				where: { id: id },
 				relations: {
 					testimonials: true,
@@ -52,11 +58,17 @@ class TestimonialsControllers {
 				},
 			});
 
-		const mappedTestimonial = users.map((user) => mapUser(req.hostname, user));
+		if(users) {
+			const mappedTestimonial = [users].map((user) =>
+				mapTestimonial(req.hostname, user)
+			);
 
-			return users
-				? res.status(200).json(mappedTestimonial)
-				: next(new NotFound(`usuario com o id ${id} não encontrado`));
+			return res.status(200).json(mappedTestimonial)
+			
+		} else {
+			return next(new NotFound(`usuário com id ${id} não encontrado`));
+		}
+
 		} catch (error) {
 			return next(error);
 		}
@@ -89,7 +101,7 @@ class TestimonialsControllers {
 				);
 			}
 		} catch (error) {
-			if(userId === '' || text === '') {
+			if(!userId || !text) {
 				return next(new ErrorBase('Corpo da requisição vazio', 400))
 			}
 			return next(error);
@@ -158,12 +170,16 @@ class TestimonialsControllers {
 		const SQL = `SELECT testimonial.id, user.name, testimonial.text, image.photo AS avatar FROM user 
 					INNER JOIN testimonial ON testimonial.userId = user.id 
 					INNER JOIN image ON image.id = user.photoId ORDER BY RAND() LIMIT 3;`;
+
 		try {
 			const users: User[] = await manager.query(SQL);
 
-			return users.length > 0
-				? res.status(200).json(users)
-				: res.status(404).send([]);
+			if(users.length > 0) {
+				return res.status(200).json(users);
+			} else {
+				return next(new NotFound());
+			}
+
 		} catch (error) {
 			next(error);
 		}

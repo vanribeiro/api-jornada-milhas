@@ -29,7 +29,12 @@ const mapTestimonial = (hostname: string, user: User) => {
 			id: user.photo.id,
 			photo: photoURI(hostname, PORT, filename),
 		},
-		testimonials: user.testimonials
+		testimonials: user.testimonials.map(testimonial => {
+			return {
+				id: testimonial.id,
+				text: testimonial.text
+			}
+		})
 	};
 };
 
