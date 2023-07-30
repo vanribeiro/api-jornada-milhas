@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import Testimonial from "./Testimonial";
 import Image from "./Image";
+import { IsNotEmpty } from "class-validator";
 
 @Entity()
 class User {
@@ -21,6 +22,7 @@ class User {
 	id: number;
 
 	@Column()
+	@IsNotEmpty({ message: 'o campo name é obrigatório' })
 	name: string;
 
 	@OneToOne(() => Image, (image) => image.photo, {

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import Image from "./Image";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 
 @Entity()
 class Destination {
@@ -15,15 +15,11 @@ class Destination {
     id: number;
 
     @Column()
-    @IsNotEmpty({
-        message: 'o campo name é obrigatório'
-    })
+    @IsNotEmpty({ message: 'o campo name é obrigatório' })
     name: string;
 
     @Column()
-    @IsNotEmpty({
-        message: 'o campo price é obrigatório'
-    })
+    @IsNotEmpty({ message: 'o campo price é obrigatório' })
     price: number;
 
     @OneToOne(() => Image, (image) => image.photo, {

@@ -1,4 +1,6 @@
 import { randomBytes } from 'crypto';
+import { destinationRepository } from '../repositories/destination';
+import Destination from '../models/Destination';
 
 const storageSettingsUsersAvatar = {
     destination: function (_req: any, _file: any, callback: (arg0: null, arg1: string) => void) {
@@ -20,10 +22,11 @@ const storageSettingsDestination = {
         const PATH = 'uploads/destinations';
         callback(null, `${PATH}`);
     },
-    filename: function (req: any, file: any, callback: (arg0: null, arg1: string) => void) {
-        const { name } = req.body;
-        const splitName: string[] = name.toLowerCase().split(/\s/i);
-        const imageName: string = splitName.join('-');
+    filename: async function (req: any, file: any, callback: (arg0: null, arg1: string) => void) {
+        const { id }: any = req.params;
+        const { name }: any = req.body;
+
+        const imageName = await renameFile(name, id)
         
         const extesionFile = file.originalname.split('.')[1];
         const randomValues = randomBytes(4).toString('base64');
@@ -31,6 +34,28 @@ const storageSettingsDestination = {
         console.log(fullFilename);
 
         callback(null, fullFilename);
+    }
+}
+
+const renameFile = async (name: string | any, id: number | any): Promise<string> => {
+    
+    try {
+        let splitName: string[];
+        let imageName: string;
+
+        if(name) {
+            splitName = name.toLowerCase().split(/\s/i);
+            imageName = splitName.join('-');
+            return imageName;
+        } else {
+            const destination: Destination = await destinationRepository.findOneBy({ id });
+            splitName = destination.name.toLowerCase().split(/\s/i);
+            imageName = splitName.join('-');
+            return imageName;
+        }
+
+    } catch (error) {
+        throw error;
     }
 }
 

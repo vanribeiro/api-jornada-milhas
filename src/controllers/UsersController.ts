@@ -8,6 +8,7 @@ import NotFound from "../errors/NotFound";
 import dotenv from "dotenv";
 import ErrorBase from "../errors/ErrorBase";
 import { mapUser } from "../utils/mappers";
+import { validate } from "class-validator";
 
 dotenv.config();
 
@@ -64,20 +65,31 @@ class UsersController {
 			let imageAdded;
 			let userAdded;
 
-			if(name) userAdded = await userRepository.save(newUser);
+			const errorsUser = await validate(newUser);
 
-			if(filename) imageAdded = await ImagesController.addImage(newImage);
-			
-			return res.status(201).json({
-				message: message,
-				userId: userAdded.id,
-				imageId: imageAdded.id,
-			});
+			if (errorsUser.length > 0) {
+				const messages = errorsUser
+					.map((errors) => errors.constraints.isNotEmpty)
+					.join("; ");
+				return next(new ErrorBase(messages, 400));
+			} else {
+				userAdded = await userRepository.save(newUser);
+				imageAdded = await imageRepository.save(newImage);
 
-		} catch (error) {
-			if(name === '') {
-				return next(new ErrorBase('Corpo da requisição vazio', 400));
+				if (imageAdded && userAdded) {
+					return res.status(201).json({
+						message: message,
+						destinationId: userAdded.id,
+						imageId: imageAdded.id,
+					});
+				} else {
+					return res.status(201).json({
+						message: message,
+						destinationId: userAdded.id,
+					});
+				}
 			}
+		} catch (error) {
 			return next(error);
 		}
 	}
@@ -99,7 +111,8 @@ class UsersController {
 				if (filename) {
 					imageUpdated = await ImagesController.updateImage(
 						id,
-						filename
+						filename,
+						'user'
 					);
 				}
 
@@ -149,7 +162,5 @@ class UsersController {
 		}
 	}
 }
-
-
 
 export default UsersController;

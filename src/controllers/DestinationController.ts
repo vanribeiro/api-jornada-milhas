@@ -6,6 +6,7 @@ import Image from "../models/Image";
 import { imageRepository } from "../repositories/image";
 import { validate } from "class-validator";
 import ErrorBase from "../errors/ErrorBase";
+import ImagesController from "./ImagesController";
 
 //TODO
 class DestinationController {
@@ -74,8 +75,8 @@ class DestinationController {
 		const message: string = "destino adicionado com sucesso!";
 
 		try {
-			let imageAdded;
-			let destinationAdded;
+			let imageAdded: Image;
+			let destinationAdded: Destination;
 
 			const errorsDestination = await validate(newDestination);
 
@@ -104,7 +105,7 @@ class DestinationController {
 				}
 			}
 		} catch (error) {
-			next(error);
+			return next(error);
 		}
 	}
 
@@ -114,9 +115,57 @@ class DestinationController {
 		next: NextFunction
 	) {
 		const { id }: any = req.params;
-		const { filename }: any = req.file;
+		const { filename }: any = req.file || '';
 		const { name, price }: any = req.body;
+		const message: string = "destino atualizado com sucesso!";
+
 		try {
+			const destination: Destination =
+				await destinationRepository.findOneBy({ id });
+
+			if (!destination) {
+				return next(
+					new NotFound(`usuario com o id ${id} não encontrado`)
+				);
+			} else {
+				const errorsDestination = await validate(destination);
+
+				if (errorsDestination.length > 0) {
+					const messages = errorsDestination
+						.map((errors) => errors.constraints.isNotEmpty)
+						.join("; ");
+						
+					return next(new ErrorBase(messages, 400));
+				} else {
+					let imageToBeUpdated: Image | any;
+
+					if (name) destination.name = name;
+					if (price) destination.price = price;
+					if (filename)
+						imageToBeUpdated = await ImagesController.updateImage(
+							id,
+							filename,
+							'destination'
+						);
+
+					const destinationUpdated = await destinationRepository.save(
+						destination
+					);
+
+					if (imageToBeUpdated && destinationUpdated) {
+						return res.status(201).json({
+							message: message,
+							destinationId: destinationUpdated.id,
+							imageId: imageToBeUpdated.id,
+						});
+					} else {
+						return res.status(201).json({
+							message: message,
+							destinationId: destinationUpdated.id,
+						});
+					}
+				}
+			}
 		} catch (error) {
 			next(error);
 		}
