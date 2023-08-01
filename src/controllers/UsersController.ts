@@ -13,12 +13,13 @@ import { validate } from "class-validator";
 dotenv.config();
 
 class UsersController {
-	static async listUsers(req: Request, res: Response, next: NextFunction) {
+	static async listAllUsers(req: Request, res: Response, next: NextFunction) {
 		try {
 			const users: User[] = await userRepository.find({
 				relations: {
 					photo: true,
 				},
+				take: 12
 			});
 
 			const usersMapped = users.map((user) =>
@@ -33,7 +34,7 @@ class UsersController {
 		}
 	}
 
-	static async findOneUser(req: Request, res: Response, next: NextFunction) {
+	static async findUserById(req: Request, res: Response, next: NextFunction) {
 		const { id }: any = req.params;
 
 		try {
@@ -112,7 +113,7 @@ class UsersController {
 					imageUpdated = await ImagesController.updateImage(
 						id,
 						filename,
-						'user'
+						"user"
 					);
 				}
 
@@ -133,6 +134,7 @@ class UsersController {
 
 	static async deleteUser(req: Request, res: Response, next: NextFunction) {
 		const { id }: any = req.params;
+		const SUBFOLDER_PATH_NAME = "users/avatars";
 
 		const message: string = `usuario com o id ${id} foi deletado`;
 
@@ -145,11 +147,19 @@ class UsersController {
 				const photoId = user.photo.id;
 				const photoName = user.photo.photo;
 
-				const result = await imageRepository.delete(photoId);
-				const imageToBeDeleted =
-					await ImagesController?.deleteImageFromFolder(photoName);
+				const filenameToBeDeleted = await imageRepository.delete(
+					photoId
+				);
+				const imageToBeDeletedFromFolder =
+					await ImagesController?.deleteImageFromFolder(
+						photoName,
+						SUBFOLDER_PATH_NAME
+					);
 
-				if (imageToBeDeleted && result.affected === 1) {
+				if (
+					imageToBeDeletedFromFolder &&
+					filenameToBeDeleted.affected === 1
+				) {
 					return res.status(200).json({ message: message });
 				}
 			} else {

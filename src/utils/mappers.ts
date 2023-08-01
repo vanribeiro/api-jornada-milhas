@@ -1,33 +1,49 @@
+import Destination from "../models/Destination";
 import User from "../models/User";
 import dotenv from "dotenv";
 dotenv.config();
 
-const photoURI = (h: string, p: string, f: string, ) => `http://${h}${p}/users/avatars/${f}`;
+const PORT: string = `:${process.env.PORT}`;
+const photoURI = (h: string, p:string, f: string) => `http://${h}${PORT}/${p}/${f}`;
 
 const mapUser = (hostname: string, user: User) => {
-	const PORT: string = `:${process.env.PORT}`;
 	const filename: string = user.photo.photo;
+	const FOLDER_PATH_NAME = 'users/avatars';
 
 	return {
 		id: user.id,
 		name: user.name,
 		photo: {
 			id: user.photo.id,
-			photo: photoURI(hostname, PORT, filename),
+			photo: photoURI(hostname, FOLDER_PATH_NAME, filename),
+		},
+	};
+};
+
+const mapDestination = (hostname: string, destination: Destination) => {
+	const filename: string = destination.photo.photo;
+	const FOLDER_PATH_NAME = 'destinations';
+
+	return {
+		id: destination.id,
+		name: destination.name,
+		photo: {
+			id: destination.photo.id,
+			photo: photoURI(hostname, FOLDER_PATH_NAME, filename),
 		},
 	};
 };
 
 const mapTestimonial = (hostname: string, user: User) => {
-	const PORT: string = `:${process.env.PORT}`;
 	const filename: string = user.photo.photo;
+	const FOLDER_PATH_NAME = 'users/avatars';
 
 	return {
 		id: user.id,
 		name: user.name,
 		photo: {
 			id: user.photo.id,
-			photo: photoURI(hostname, PORT, filename),
+			photo: photoURI(hostname, FOLDER_PATH_NAME, filename),
 		},
 		testimonials: user.testimonials.map(testimonial => {
 			return {
@@ -38,4 +54,4 @@ const mapTestimonial = (hostname: string, user: User) => {
 	};
 };
 
-export { mapUser, mapTestimonial };
+export { mapUser, mapTestimonial, mapDestination };

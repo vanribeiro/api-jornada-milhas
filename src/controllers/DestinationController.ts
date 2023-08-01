@@ -7,27 +7,36 @@ import { imageRepository } from "../repositories/image";
 import { validate } from "class-validator";
 import ErrorBase from "../errors/ErrorBase";
 import ImagesController from "./ImagesController";
+import { mapDestination } from "../utils/mappers";
 
-//TODO
 class DestinationController {
 	static async listAllDestinations(
-		_req: Request,
+		req: Request,
 		res: Response,
 		next: NextFunction
 	) {
+		const { nome }: string | any = req.query;
+
 		try {
-			const destinations: Destination[] =
-				await destinationRepository.find({
-					relations: {
-						photo: true,
-					},
+			const [destinations, counted]: Destination[] | number | any =
+				await destinationRepository.findAndCount({
+					relations: { photo: true },
+					where: { name: nome },
+					take: 12,
 				});
 
-			if (destinations.length > 0) {
-				return res.status(200).json(destinations);
-			} else {
-				return next(new NotFound("Nenhum destino foi encontrado"));
-			}
+			const destinationMapped = destinations.map(
+				(destination: Destination) => {
+					return mapDestination(req.hostname, destination);
+				}
+			);
+
+			return counted > 0
+				? res.status(200).json({
+						count: counted,
+						destinations: destinationMapped,
+				  })
+				: next(new NotFound("Nenhum destino foi encontrado"));
 		} catch (error) {
 			next(error);
 		}
@@ -49,11 +58,9 @@ class DestinationController {
 					},
 				});
 
-			if (destination) {
-				return res.status(200).json(destination);
-			} else {
-				return next(new NotFound("Destino não encontrado"));
-			}
+			return destination
+				? res.status(200).json(destination)
+				: next(new NotFound("Destino não encontrado"));
 		} catch (error) {
 			next(error);
 		}
@@ -114,57 +121,54 @@ class DestinationController {
 		res: Response,
 		next: NextFunction
 	) {
-		const { id }: any = req.params;
-		const { filename }: any = req.file || '';
+		const { filename }: any = req.file || "";
 		const { name, price }: any = req.body;
+		const { id }: any = req.params;
 		const message: string = "destino atualizado com sucesso!";
 
 		try {
+			let imageUpdated: Image | any;
 			const destination: Destination =
 				await destinationRepository.findOneBy({ id });
 
-			if (!destination) {
-				return next(
-					new NotFound(`usuario com o id ${id} não encontrado`)
-				);
-			} else {
+			if (destination) {
 				const errorsDestination = await validate(destination);
-
 				if (errorsDestination.length > 0) {
 					const messages = errorsDestination
 						.map((errors) => errors.constraints.isNotEmpty)
 						.join("; ");
-						
+
 					return next(new ErrorBase(messages, 400));
 				} else {
-					let imageToBeUpdated: Image | any;
-
-					if (name) destination.name = name;
-					if (price) destination.price = price;
-					if (filename)
-						imageToBeUpdated = await ImagesController.updateImage(
-							id,
-							filename,
-							'destination'
-						);
-
+					destination.name = name;
+					destination.price = price;
 					const destinationUpdated = await destinationRepository.save(
 						destination
 					);
 
-					if (imageToBeUpdated && destinationUpdated) {
+					if (filename) {
+						imageUpdated = await ImagesController.updateImage(
+							id,
+							filename,
+							"destination"
+						);
+
 						return res.status(201).json({
 							message: message,
 							destinationId: destinationUpdated.id,
-							imageId: imageToBeUpdated.id,
-						});
-					} else {
-						return res.status(201).json({
-							message: message,
-							destinationId: destinationUpdated.id,
+							imageId: imageUpdated.id,
 						});
 					}
+
+					return res.status(201).json({
+						message: message,
+						destinationId: destinationUpdated.id,
+					});
 				}
+			} else {
+				return next(
+					new NotFound(`usuario com o id ${id} não encontrado`)
+				);
 			}
 		} catch (error) {
 			next(error);
@@ -176,7 +180,42 @@ class DestinationController {
 		res: Response,
 		next: NextFunction
 	) {
+		const { id }: any = req.params;
+		const message: string = `destino com id ${id} deletado com sucesso`;
+		const SUBFOLDER_PATH_NAME = "destinations";
+
 		try {
+			const destination = await destinationRepository.findOneBy({ id });
+
+			if (destination) {
+				const photoId = destination.photo.id;
+				const photoName = destination.photo.photo;
+
+				const filenameToBeDeleted = await imageRepository.delete(
+					photoId
+				);
+
+				const imageToBeDeletedFromFolder =
+					await ImagesController?.deleteImageFromFolder(
+						photoName,
+						SUBFOLDER_PATH_NAME
+					);
+
+				if (
+					imageToBeDeletedFromFolder &&
+					filenameToBeDeleted.affected === 1
+				) {
+					res.status(200).json({
+						message: message,
+						destinationId: destination.id,
+						imageId: destination.photo.id,
+					});
+				}
+			} else {
+				return next(
+					new NotFound(`destino com o id ${id} não encontrado`)
+				);
+			}
 		} catch (error) {
 			next(error);
 		}

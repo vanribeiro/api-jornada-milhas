@@ -31,7 +31,6 @@ const storageSettingsDestination = {
         const extesionFile = file.originalname.split('.')[1];
         const randomValues = randomBytes(4).toString('base64');
         const fullFilename = `${imageName}-${randomValues}.${extesionFile}`;
-        console.log(fullFilename);
 
         callback(null, fullFilename);
     }
@@ -46,13 +45,12 @@ const renameFile = async (name: string | any, id: number | any): Promise<string>
         if(name) {
             splitName = name.toLowerCase().split(/\s/i);
             imageName = splitName.join('-');
-            return imageName;
         } else {
             const destination: Destination = await destinationRepository.findOneBy({ id });
             splitName = destination.name.toLowerCase().split(/\s/i);
             imageName = splitName.join('-');
-            return imageName;
         }
+        return imageName;
 
     } catch (error) {
         throw error;

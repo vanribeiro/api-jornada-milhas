@@ -17,8 +17,8 @@ class Image {
     @OneToOne(() => User, (user) => user.photo, { onDelete: "CASCADE" })
     user: Relation<User>;
 
-    @OneToOne(() => Destination, (destination) => destination.photo)
-    destination: Relation<Image>;
+    @OneToOne(() => Destination, (destination) => destination.photo, { onDelete: "CASCADE" })
+    destination: Relation<Destination>;
 }
 
 export default Image;

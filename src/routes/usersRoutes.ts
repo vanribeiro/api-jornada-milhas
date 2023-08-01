@@ -10,8 +10,8 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router
-    .get('/usuarios', UsersController.listUsers)
-    .get('/usuarios/:id', UsersController.findOneUser)
+    .get('/usuarios', UsersController.listAllUsers)
+    .get('/usuarios/:id', UsersController.findUserById)
     .post('/usuarios', upload.single('avatar'), UsersController.addUser)
     .put('/usuarios/:id', upload.single('avatar'), UsersController.updateUser)
     .delete('/usuarios/:id', UsersController.deleteUser);

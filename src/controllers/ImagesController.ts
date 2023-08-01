@@ -18,7 +18,6 @@ class ImagesController {
 		filename: string,
 		sqlTableName: string
 	) {
-
 		try {
 			const photoId: number = await ImagesController.findId(
 				id,
@@ -37,13 +36,16 @@ class ImagesController {
 		}
 	}
 
-	static async deleteImageFromFolder(photoName: string) {
+	static async deleteImageFromFolder(
+		photoName: string,
+		subfolderPathName: string
+	) {
 		try {
 			if (photoName === null || photoName === undefined) {
 				return null;
 			} else {
 				const result = await deleteFile(
-					`uploads/users/avatars/${photoName}`
+					`uploads/${subfolderPathName}/${photoName}`
 				);
 				return !result;
 			}
