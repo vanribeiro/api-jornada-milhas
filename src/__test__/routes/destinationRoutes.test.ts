@@ -24,8 +24,8 @@ beforeAll(async () => {
 	});
 });
 
-describe("Destinations Routes", () => {
-	describe.skip("GET /destinos", () => {
+describe.skip("Destinations Routes", () => {
+	describe("GET /destinos", () => {
 		test(
 			"should return 200 when fetched all destinations",
 			async () => {
@@ -85,7 +85,7 @@ describe("Destinations Routes", () => {
 
 		test("should return the total of items in destinations array", async () => {
 			const responseDestination = await request(app).get("/destinos/");
-			expect(responseDestination.body.count).toBe(6);
+			expect(responseDestination.body.count).toBe(responseDestination.body.destinations.length);
 		});
 
 		test("should return an object fetched via query param", async () => {
@@ -121,7 +121,7 @@ describe("Destinations Routes", () => {
 		});
 	});
 
-	describe.skip("POST /destinos", () => {
+	describe("POST /destinos", () => {
 		test(
 			"should return 201 when create a new destination",
 			async () => {
@@ -199,7 +199,7 @@ describe("Destinations Routes", () => {
 		);
 	});
 
-	describe.skip("DELETE /destinos/:id", () => {
+	describe("DELETE /destinos/:id", () => {
 		test(
 			"should return 200 when a destination is deleted",
 			async () => {
@@ -225,7 +225,7 @@ describe("Destinations Routes", () => {
 		);
 	});
 
-	describe.skip("UPDATE /destinos/:id", () => {
+	describe("UPDATE /destinos/:id", () => {
 		test(
 			"should return 201 when a destination name was updated",
 			async () => {

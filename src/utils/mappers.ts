@@ -3,8 +3,15 @@ import User from "../models/User";
 import dotenv from "dotenv";
 dotenv.config();
 
-const PORT: string = `:${process.env.PORT}`;
-const photoURI = (h: string, p:string, f: string) => `http://${h}${PORT}/${p}/${f}`;
+const photoURI = (h: string, p:string, f: string) => {
+	const PORT: string = `:${process.env.PORT}`;
+
+	if (f === 'default-no-image.png') {
+		return `http://${h}${PORT}/default/${f}`;
+	}
+
+	return `http://${h}${PORT}/${p}/${f}`;
+};
 
 const mapUser = (hostname: string, user: User) => {
 	const filename: string = user.photo.photo;

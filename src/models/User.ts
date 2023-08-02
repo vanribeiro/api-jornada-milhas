@@ -35,7 +35,10 @@ class User {
 
 	@OneToMany(() => Testimonial, (testimonial) => testimonial.user, {
 		cascade: true,
+		eager: true,
+		onDelete: 'CASCADE'
 	})
+	@JoinColumn()
 	testimonials: Testimonial[];
 }
 

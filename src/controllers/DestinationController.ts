@@ -134,6 +134,8 @@ class DestinationController {
 		const { name, price }: string | any = req.body;
 		const { id }: string | any = req.params;
 		const message: string = "destino atualizado com sucesso!";
+		const SQL_TABLE = "destination";
+		const SUBFOLDER_PATH_NAME = "destinos";
 
 		try {
 			let imageUpdated: Image | any;
@@ -159,8 +161,8 @@ class DestinationController {
 						imageUpdated = await ImagesController.updateImage(
 							id,
 							filename,
-							"destination",
-							"destinos"
+							SQL_TABLE,
+							SUBFOLDER_PATH_NAME
 						);
 
 						return res.status(201).json({

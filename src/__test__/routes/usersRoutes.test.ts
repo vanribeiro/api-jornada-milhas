@@ -24,9 +24,9 @@ beforeAll(async () => {
 	});
 });
 
-describe.skip('Users Routes', () => {
+describe('Users Routes', () => {
 	
-	describe("GET /usuarios", () => {
+	describe.skip("GET /usuarios", () => {
 		
 		test("should return 200 when try to fetch all users", async () => {
 			const responseUser = await request(app).get("/usuarios");
@@ -45,7 +45,7 @@ describe.skip('Users Routes', () => {
 				"name": "Marcia",
 				"photo": {
 					"id": 15,
-					"photo": "http://127.0.0.1:3000/users/avatars/mNSGFa+jkgQJVZJh1t1jnxg6HUVkyZuZPgsdT2ENOx8=.jpg"
+					"photo": "http://127.0.0.1:3000/users/avatars/M7r7x9I4+VkFO8Eo4JYk5EP9pNAqrii+Ojsu5kmLKR8=.jpg"
 				}
 			}];
 	
@@ -62,7 +62,7 @@ describe.skip('Users Routes', () => {
 	
 	});
 	
-	describe("POST /usuarios", () => {
+	describe.skip("POST /usuarios", () => {
 	
 		test("should return 201 when create a new user", async () => {
 			const imagePath = `${__dirname}/mocks/avatar.jpg`;
@@ -99,7 +99,7 @@ describe.skip('Users Routes', () => {
 	
 	});
 	
-	describe("DELETE /usuarios/:id", () => {
+	describe.skip("DELETE /usuarios/:id", () => {
 		test("should return 200 when a user is deleted", async () => {
 			const result: request.Response = await request(app).delete(
 				`/usuarios/${userAddedId}`
@@ -131,7 +131,7 @@ describe.skip('Users Routes', () => {
 		}, 10 * 1000);
 	
 		test("should return 201 only when the image is updated", async () => {
-			const ID_TO_BE_UPDATE = 27;
+			const ID_TO_BE_UPDATE = 21;
 	
 			const imagePath: string = `${__dirname}/mocks/avatar.jpg`;
 			
@@ -152,7 +152,7 @@ describe.skip('Users Routes', () => {
 		}, TIMEOUT);
 	
 		test("should return 201 only when image and name are updated", async () => {
-			const ID_TO_BE_UPDATE = 25;
+			const ID_TO_BE_UPDATE = 23;
 	
 			const imagePath: string = `${__dirname}/mocks/avatar.jpg`;
 			

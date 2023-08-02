@@ -31,17 +31,19 @@ class ImagesController {
 			const oldPhoto = image.photo;
 			image.photo = filename;
 
-			const result: boolean = await deleteFile(
-				`uploads/${subfolderPathName}/${oldPhoto}`
-			);
-
 			const imageUpdated: Image = await imageRepository.save(image);
 
-			if(imageUpdated && !result){
-				return { id: imageUpdated.id };
+			if(filename !== 'default-no-image.png') {
+
+				await deleteFile(
+					`uploads/${subfolderPathName}/${oldPhoto}`
+				);
 			}
+			
+			return { id: imageUpdated.id };
 
 		} catch (error) {
+			console.log(error);
 			throw error;
 		}
 	}

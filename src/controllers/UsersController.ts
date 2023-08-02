@@ -58,37 +58,36 @@ class UsersController {
 	static async addUser(req: Request, res: Response, next: NextFunction) {
 		const { filename }: any = req.file;
 		const { name }: any = req.body;
-		const newImage: Image = new Image(filename);
+		const DEFAULT_NO_IMAGE = 'default-no-image.png';
+		const newFileName = filename ? filename : DEFAULT_NO_IMAGE;
+
+		const newImage: Image = new Image(newFileName);
 		const newUser: User = new User(name, newImage);
 		const message: string = "usuario adicionado com sucesso!";
 
 		try {
-			let imageAdded;
-			let userAdded;
+			let imageAdded: Image | any;
+			let userAdded: User;
 
 			const errorsUser = await validate(newUser);
 
 			if (errorsUser.length > 0) {
+
 				const messages = errorsUser
 					.map((errors) => errors.constraints.isNotEmpty)
 					.join("; ");
 				return next(new ErrorBase(messages, 400));
-			} else {
-				userAdded = await userRepository.save(newUser);
-				imageAdded = await imageRepository.save(newImage);
 
-				if (imageAdded && userAdded) {
-					return res.status(201).json({
-						message: message,
-						destinationId: userAdded.id,
-						imageId: imageAdded.id,
-					});
-				} else {
-					return res.status(201).json({
-						message: message,
-						destinationId: userAdded.id,
-					});
-				}
+			} else {
+
+				userAdded = await userRepository.save(newUser);
+				imageAdded = await ImagesController.addImage(newImage);
+
+				return res.status(201).json({
+					message: message,
+					userId: userAdded.id,
+					imageId: imageAdded.id,
+				});
 			}
 		} catch (error) {
 			return next(error);
@@ -100,28 +99,47 @@ class UsersController {
 		const { name }: any = req.body;
 		const { id }: any = req.params;
 		const message: string = "usuario atualizado com sucesso!";
+		const SQL_TABLE = "user";
+		const SUBFOLDER_PATH_NAME = "users/avatars";
 
 		try {
 			const user: User = await userRepository.findOneBy({ id });
 			let imageUpdated: any;
 
 			if (user) {
-				user.name = name;
-				await userRepository.save(user);
+				const errorsUser = await validate(user);
+				if(errorsUser.length > 0) {
+					const messages = errorsUser
+						.map((errors) => errors.constraints.isNotEmpty)
+						.join("; ");
 
-				if (filename) {
-					imageUpdated = await ImagesController.updateImage(
-						id,
-						filename,
-						"user"
-					);
+					return next(new ErrorBase(messages, 400));
+				} else {
+
+					user.name = name;
+					const userUpdated = await userRepository.save(user);
+	
+					if (filename) {
+						
+						imageUpdated = await ImagesController.updateImage(
+							id,
+							filename,
+							SQL_TABLE,
+							SUBFOLDER_PATH_NAME
+						);
+
+						return res.status(201).json({
+							message: message,
+							userId: id,
+							imageId: imageUpdated?.id,
+						});
+					}
+					
+					return res.status(201).json({
+						message: message,
+						userId: userUpdated.id,
+					});
 				}
-
-				return res.status(201).json({
-					message: message,
-					userId: id,
-					imageId: imageUpdated?.id,
-				});
 			} else {
 				return next(
 					new NotFound(`usuario com o id ${id} não encontrado`)
