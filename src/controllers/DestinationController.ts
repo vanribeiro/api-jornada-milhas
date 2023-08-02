@@ -159,7 +159,8 @@ class DestinationController {
 						imageUpdated = await ImagesController.updateImage(
 							id,
 							filename,
-							"destination"
+							"destination",
+							"destinos"
 						);
 
 						return res.status(201).json({

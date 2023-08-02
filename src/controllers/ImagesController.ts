@@ -5,7 +5,6 @@ import deleteFile from "../utils/delete-file";
 
 class ImagesController {
 	static async addImage(newImage: Image) {
-		
 		try {
 			const image = await imageRepository.save(newImage);
 			return { id: image.id };
@@ -17,7 +16,8 @@ class ImagesController {
 	static async updateImage(
 		id: number,
 		filename: string,
-		sqlTableName: string
+		sqlTableName: string,
+		subfolderPathName: string
 	) {
 		try {
 			const photoId: number = await ImagesController.findId(
@@ -28,10 +28,19 @@ class ImagesController {
 			const image: Image = await imageRepository.findOneBy({
 				id: photoId,
 			});
+			const oldPhoto = image.photo;
 			image.photo = filename;
 
-			const imageUpdated = await imageRepository.save(image);
-			return { id: imageUpdated.id };
+			const result: boolean = await deleteFile(
+				`uploads/${subfolderPathName}/${oldPhoto}`
+			);
+
+			const imageUpdated: Image = await imageRepository.save(image);
+
+			if(imageUpdated && !result){
+				return { id: imageUpdated.id };
+			}
+
 		} catch (error) {
 			throw error;
 		}
