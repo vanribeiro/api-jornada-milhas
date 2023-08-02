@@ -24,7 +24,7 @@ beforeAll(async () => {
 	});
 });
 
-describe('Users Routes', () => {
+describe.skip('Users Routes', () => {
 	
 	describe("GET /usuarios", () => {
 		

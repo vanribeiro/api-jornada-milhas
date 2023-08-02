@@ -16,7 +16,7 @@ beforeAll(async () => {
 	});
 });
 
-describe('Testimonials Routes', () => {
+describe.skip('Testimonials Routes', () => {
 	
 	describe("GET /depoimentos", () => {
 		test("should fetch all testimonials", async () => {

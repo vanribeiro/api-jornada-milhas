@@ -47,20 +47,30 @@ class DestinationController {
 		res: Response,
 		next: NextFunction
 	) {
-		const { id }: any = req.params;
+		const { id }: string | any = req.params;
 
 		try {
 			const destination: Destination =
 				await destinationRepository.findOne({
-					where: { id },
+					where: { id: id },
 					relations: {
 						photo: true,
 					},
 				});
 
-			return destination
-				? res.status(200).json(destination)
-				: next(new NotFound("Destino não encontrado"));
+			if(destination) {
+
+				const destinationMapped = [destination].map(
+					(destination: Destination) => {
+						return mapDestination(req.hostname, destination);
+					}
+				);
+
+				return res.status(200).json(destinationMapped);
+			} else {
+				return next(new NotFound("Destino não encontrado"));
+			}
+			
 		} catch (error) {
 			next(error);
 		}
@@ -71,45 +81,44 @@ class DestinationController {
 		res: Response,
 		next: NextFunction
 	) {
-		const { filename }: any = req.file || "";
-		const { name, price }: any = req.body;
-		const newImage: Image = new Image(filename);
+		const { filename }: Express.Multer.File | any  = req.file || '';
+		const { name, price }: string | any = req.body;
+		const DEFAULT_NO_IMAGE = 'default-no-image.png';
+		const newFileName = filename ? filename : DEFAULT_NO_IMAGE;
+
+		const newImage: Image = new Image(newFileName);
 		const newDestination: Destination = new Destination(
 			name,
 			price,
 			newImage
 		);
-		const message: string = "destino adicionado com sucesso!";
+		const message: string = 'destino adicionado com sucesso!';
 
 		try {
-			let imageAdded: Image;
+			let imageAdded: Image | any;
 			let destinationAdded: Destination;
 
 			const errorsDestination = await validate(newDestination);
 
 			if (errorsDestination.length > 0) {
+
 				const messages = errorsDestination
 					.map((errors) => errors.constraints.isNotEmpty)
 					.join("; ");
 				return next(new ErrorBase(messages, 400));
+
 			} else {
 				destinationAdded = await destinationRepository.save(
 					newDestination
 				);
-				imageAdded = await imageRepository.save(newImage);
+				
+				imageAdded = await ImagesController.addImage(newImage);
 
-				if (imageAdded && destinationAdded) {
-					return res.status(201).json({
-						message: message,
-						destinationId: destinationAdded.id,
-						imageId: imageAdded.id,
-					});
-				} else {
-					return res.status(201).json({
-						message: message,
-						destinationId: destinationAdded.id,
-					});
-				}
+				return res.status(201).json({
+					message: message,
+					destinationId: destinationAdded.id,
+					imageId: imageAdded.id,
+				});
 			}
 		} catch (error) {
 			return next(error);
@@ -121,9 +130,9 @@ class DestinationController {
 		res: Response,
 		next: NextFunction
 	) {
-		const { filename }: any = req.file || "";
-		const { name, price }: any = req.body;
-		const { id }: any = req.params;
+		const { filename }: Express.Multer.File | any = req.file || "";
+		const { name, price }: string | any = req.body;
+		const { id }: string | any = req.params;
 		const message: string = "destino atualizado com sucesso!";
 
 		try {
@@ -167,7 +176,7 @@ class DestinationController {
 				}
 			} else {
 				return next(
-					new NotFound(`usuario com o id ${id} não encontrado`)
+					new NotFound(`destino com o id ${id} não encontrado`)
 				);
 			}
 		} catch (error) {
@@ -182,11 +191,11 @@ class DestinationController {
 	) {
 		const { id }: any = req.params;
 		const message: string = `destino com id ${id} deletado com sucesso`;
-		const SUBFOLDER_PATH_NAME = "destinations";
+		const SUBFOLDER_PATH_NAME = "destinos";
 
 		try {
-			const destination = await destinationRepository.findOneBy({ id });
-
+			const destination = await destinationRepository.findOneBy({ id: id });
+			
 			if (destination) {
 				const photoId = destination.photo.id;
 				const photoName = destination.photo.photo;

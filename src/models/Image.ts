@@ -4,6 +4,7 @@ import Destination from "./Destination";
 
 @Entity()
 class Image {
+    
     constructor(photo: string){
         this.photo = photo;
     }

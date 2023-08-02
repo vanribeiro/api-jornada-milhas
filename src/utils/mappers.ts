@@ -22,11 +22,12 @@ const mapUser = (hostname: string, user: User) => {
 
 const mapDestination = (hostname: string, destination: Destination) => {
 	const filename: string = destination.photo.photo;
-	const FOLDER_PATH_NAME = 'destinations';
+	const FOLDER_PATH_NAME = 'destinos';
 
 	return {
 		id: destination.id,
 		name: destination.name,
+		price: destination.price,
 		photo: {
 			id: destination.photo.id,
 			photo: photoURI(hostname, FOLDER_PATH_NAME, filename),

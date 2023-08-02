@@ -4,7 +4,7 @@
   "description": "API RESTful para conectar ao site jornada milhas",
   "main": "src/server.js",
   "scripts": {
-    "test": "jest --watchAll --forceExit --detectOpenHandles --maxWorkers=1 --coverage=false",
+    "test": "jest --watchAll --forceExit --detectOpenHandles --maxWorkers=1 --coverage=false --no-cache",
     "test-coverage": "jest --forceExit --detectOpenHandles --maxWorkers=1",
     "build": "tsc",
     "start": "nodemon --watch src/ --exec ts-node src/server.ts -e ts"

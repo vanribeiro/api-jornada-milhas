@@ -5,6 +5,7 @@ import deleteFile from "../utils/delete-file";
 
 class ImagesController {
 	static async addImage(newImage: Image) {
+		
 		try {
 			const image = await imageRepository.save(newImage);
 			return { id: image.id };

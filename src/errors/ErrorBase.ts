@@ -12,7 +12,7 @@ class ErrorBase {
         this.status = status;
     }
 
-    async sendAnswer(res: Response, _obj: any){
+    async sendAnswer(res: Response){
         return res.status(this.status).send({
             message: this.message,
             status: this.status

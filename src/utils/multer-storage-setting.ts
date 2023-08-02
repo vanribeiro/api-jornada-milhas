@@ -19,7 +19,7 @@ const storageSettingsUsersAvatar = {
 
 const storageSettingsDestination = {
     destination: function (_req: any, _file: any, callback: (arg0: null, arg1: string) => void) {
-        const PATH = 'uploads/destinations';
+        const PATH = 'uploads/destinos/';
         callback(null, `${PATH}`);
     },
     filename: async function (req: any, file: any, callback: (arg0: null, arg1: string) => void) {
